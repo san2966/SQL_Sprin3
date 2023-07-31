@@ -1,0 +1,38 @@
+use hr;
+-- ====================================================================================================================================================
+-- TASK-1:- The company wants to promote a hybrid work culture and reduce the operation cost and occupancy of its offices across differant cities
+-- ====================================================================================================================================================
+select count(employee_id) as 'total', l.city
+from employees e left join departments d on e.department_id=d.department_id inner join locations l on l.location_id=d.location_id
+group by l.city order by count(employee_id) desc  limit 5;
+-- ====================================================================================================================================================
+-- TASK-2:- List the firstnames, lastnames, countries, cities, departments, and salaries of the employees from the top five cities identified in task-1
+-- ====================================================================================================================================================
+select e.first_name, e.last_name, c.country_name, l.city, d.department_name, e.salary
+from employees e join departments d using(department_id) join locations l using (location_id) join countries c using (country_id)
+where l.city in ('South San Francisco','Oxford','Seattle','Southlake','Toronto');
+-- ====================================================================================================================================================
+-- TASK-3:- list the cities in which the number of employees is less than 10
+-- ====================================================================================================================================================
+select count(employee_id) as 'total', l.city
+from employees e left join departments d on e.department_id=d.department_id inner join locations l on l.location_id=d.location_id
+group by l.city  having count(employee_id)<10;
+-- ====================================================================================================================================================
+-- TASK-4:- Find the average experiance (in years) of the employees of each city identified in Task-3
+-- ====================================================================================================================================================
+select l.city, avg((year(curdate()))-(year(hire_date))) as 'average_experiance'
+from employees e join departments d using (department_id) join locations l using (location_id)
+group by l.city having l.city in ('Toronto','London','Southlake','Munich');
+-- ====================================================================================================================================================
+-- TASK-5:- The company wants to communicate the work from home policy to those employees who are from cities identified in task-1 and have 
+-- also completed 10 years in the organization 
+-- ====================================================================================================================================================
+select e.first_name, e.last_name, e.email, e.phone_number, ((year(curdate()))-(year(hire_date))) as 'total_experiance'
+from employees e join departments d using (department_id) join locations l using (location_id)
+where l.city in ('South San Francisco','Oxford','Seattle','Southlake','Toronto') order by 'total_experiance'>10;
+-- ====================================================================================================================================================
+-- TASK-6:- List the IDs of the managers of the employees identified in Task 5
+-- ====================================================================================================================================================
+select e.employee_id, e.first_name, e.last_name, e.email, e.phone_number,e.manager_id, ((year(curdate()))-(year(hire_date))) as 'total_experiance'
+from employees e join departments d using (department_id) join locations l using (location_id)
+where l.city in ('South San Francisco','Oxford','Seattle','Southlake','Toronto') order by 'total_experiance'>10;
