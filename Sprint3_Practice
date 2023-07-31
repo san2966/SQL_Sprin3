@@ -1,0 +1,32 @@
+use hr;
+
+-- Task-1:-
+-- List the IDs, FirstName, and the LastName of the employees working into the IT department
+
+select employee_id, first_name, last_name,department_name from employees join departments using(department_id) where department_name='IT';
+
+-- Task-2:-
+-- Extract the minimum and maximum salaries for each department
+
+select department_name, max(salary), min(salary) from employees join departments using (department_id) group by department_name; 
+
+-- Task-3:-
+-- Identify the top 10 cities that have the highest number of employees
+
+select city, count(employee_id) from employees join departments using (department_id) join locations using (location_id) group by city order by count(employee_id) desc limit 10 ;
+
+-- Task-4:-
+-- List the employee_id, firstname, lastname of all those employees whose last working day in the organization was 1999-12-31
+
+select employee_id, first_name, last_name, end_date from employees join job_history using(employee_id) where end_date='1999-12-31';
+
+-- Task-5:-
+-- Extract the employee id, firstname, department name and total experiance of all those employees who have completed at least 25 years in the organizations
+
+select employee_id, first_name, last_name, department_name, (year(curdate())-year(hire_date)) as 'total_experiace' 
+from employees join departments using(department_id) where (year(curdate())-year(hire_date))=25;
+
+
+
+
+
